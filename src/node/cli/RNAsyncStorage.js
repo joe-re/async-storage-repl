@@ -20,7 +20,15 @@ class RNAsyncStorage {
   }
 
   getAllKeys() {
-    return this.sendToRN('getAllKeys');
+    return this.sendToRN('getAllKeys').split(',');
+  }
+
+  getItem(key) {
+    return this.sendToRN('getItem', [key]);
+  }
+
+  setItem(key, value) {
+    return this.sendToRN('setItem', [key, value]);
   }
 
   sendToRN(apiName, args=[]) {
