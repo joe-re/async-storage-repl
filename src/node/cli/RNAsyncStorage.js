@@ -2,7 +2,7 @@
 
 const tempWrite = require('temp-write');
 const sleep = require('sleep');
-const fs =  require('fs');
+const fs = require('fs');
 
 function resolveMessageFromRN(filePath) {
   let result = null;
@@ -27,7 +27,7 @@ class RNAsyncStorage {
 
   getAllKeys(): string[] {
     const result = this.sendToRN('getAllKeys');
-    return (result && result.split(',') || []);
+    return result ? result.split(',') : [];
   }
 
   getItem(key: string): ?string {

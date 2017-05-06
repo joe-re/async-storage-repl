@@ -4,19 +4,20 @@ const fs = require('fs');
 class WebSocketServer {
   start() {
     const wss = new WebSocket.Server({ port: 8080 });
+    this.ws = null;
     wss.on('connection', (ws) => {
       ws.on('message', (message) => {
         const json = JSON.parse(message);
         fs.writeFileSync(json.fileName, json.result, 'utf8');
       });
-
-      process.on('message', (message) => {
-        if (message === 'exit') {
-          wss.close();
-          return;
-        }
-        ws.send(message);
-      });
+      this.ws = ws;
+    });
+    process.on('message', (message) => {
+      if (message === 'exit') {
+        wss.close();
+        return;
+      }
+      this.ws.send(message);
     });
   }
 }
