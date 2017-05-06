@@ -1,0 +1,2 @@
+#! /usr/bin/env node
+require('child_process').spawn('node', ['-r', '../src/node/preload.js'], {stdio: [0, 1, 2]})

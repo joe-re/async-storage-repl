@@ -1,3 +1,4 @@
+require('babel-register');
 const spawn = require('child_process').spawn;
 const path = require('path');
 

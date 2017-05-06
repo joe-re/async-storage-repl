@@ -1,5 +1,8 @@
+// @flow
+
 const tempWrite = require('temp-write');
 const sleep = require('sleep');
+const fs =  require('fs');
 
 function resolveMessageFromRN(filePath) {
   let result = null;
@@ -14,24 +17,28 @@ function resolveMessageFromRN(filePath) {
 }
 
 class RNAsyncStorage {
+  queNo: number;
+  que: {[key: number]: Object}
+
   constructor() {
     this.queNo = 0;
     this.que = {};
   }
 
-  getAllKeys() {
-    return this.sendToRN('getAllKeys').split(',');
+  getAllKeys(): string[] {
+    const result = this.sendToRN('getAllKeys');
+    return (result && result.split(',') || []);
   }
 
-  getItem(key) {
+  getItem(key: string): ?string {
     return this.sendToRN('getItem', [key]);
   }
 
-  setItem(key, value) {
-    return this.sendToRN('setItem', [key, value]);
+  setItem(key: string, value: string): void {
+    this.sendToRN('setItem', [key, value]);
   }
 
-  sendToRN(apiName, args=[]) {
+  sendToRN(apiName: string, args: string[]=[]): ?string {
     const queId = ++this.queNo;
     const fileName = tempWrite.sync('');
     this.que[queId] = { fileName };

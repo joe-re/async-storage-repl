@@ -5,8 +5,12 @@
   "author": "joe-re",
   "license": "MIT",
   "dependencies": {
+    "babel-register": "^6.24.1",
     "react-native": "^0.40.0",
     "sleep": "^5.1.1",
     "temp-write": "^3.2.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-flow-strip-types": "^6.22.0"
   }
 }
