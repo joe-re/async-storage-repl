@@ -3,5 +3,8 @@
   "version": "0.0.1",
   "main": "index.js",
   "author": "joe-re",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react-native": "^0.40.0"
+  }
 }
