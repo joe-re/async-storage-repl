@@ -1,12 +1,10 @@
+const tempWrite = require('temp-write');
+const sleep = require('sleep');
+
 class RNAsyncStorage {
   constructor() {
     this.queNo = 0;
     this.que = {};
-    _ayncStorageWebSocketServer.on('message', (e) => {
-      console.log(`process_message:${e}`);
-      const json = JSON.parse(e);
-      this.que[json.queId] = json.result;
-    });
   }
 
   getAllKeys() {
@@ -15,20 +13,23 @@ class RNAsyncStorage {
 
   sendToRN(apiName, args) {
     const queId = ++this.queNo;
-    _ayncStorageWebSocketServer.send(JSON.stringify({ apiName, queId, args }));
-    return new Promise((resolve, reject) => {
-      let retryCount = 0;
-      const timer = setInterval(() => {
-        if (retryCount > 9) {
-          reject("can't receive responses from react native application..");
-        }
-        if (this.que[queId]) {
-          resolve(this.que[queId]);
-          clearInterval(timer);
-        }
-        ++retryCount;
-      }, 1000);
-    });
+    const fileName = tempWrite.sync('');
+    this.que[queId] = { fileName };
+    _ayncStorageWebSocketServer.send(JSON.stringify({ apiName, queId, fileName, args }));
+    return this._resolveMessageFromRN(fileName);
+  }
+
+  _resolveMessageFromRN(filePath) {
+    let result = null;
+    for (let i = 0; i < 10; i++) {
+      sleep.sleep(1);
+      if (fs.existsSync(filePath)) {
+        result = fs.readFileSync(filePath, 'utf8');
+        break;
+      }
+    }
+    return result;
   }
 }
+
 module.exports = RNAsyncStorage;
