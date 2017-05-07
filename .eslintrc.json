@@ -4,12 +4,15 @@
   "globals": {
     "_ayncStorageWebSocketServer": true,
     "WebSocket": true,
-    "MessageEvent": true
+    "MessageEvent": true,
+    "CloseEvent": true
   },
   "rules": {
     "import/no-extraneous-dependencies": 0,
     "no-underscore-dangle": 0,
     "no-plusplus": 0,
-    "no-prototype-builtins": 0
+    "no-prototype-builtins": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0
   }
 }
