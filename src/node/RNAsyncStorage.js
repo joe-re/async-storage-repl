@@ -3,24 +3,6 @@
 const tempWrite = require('temp-write');
 const sleep = require('sleep');
 const fs = require('fs');
-console.log(tempWrite);
-
-function resolveMessageFromRN(filePath, timeout) {
-  let result = null;
-  for (let i = 0; i < timeout; i++) {
-    sleep.sleep(1);
-    console.log(filePath);
-    const fileContent = fs.readFileSync(filePath, 'utf8');
-    if (fileContent) {
-      result = JSON.parse(fileContent).result;
-      break;
-    }
-  }
-  if (!result) {
-    throw new Error("can't receive response from ReactNative Application");
-  }
-  return result;
-}
 
 module.exports = class RNAsyncStorage {
   queNo: number;
@@ -83,6 +65,26 @@ module.exports = class RNAsyncStorage {
     const fileName = tempWrite.sync('');
     this.que[queId] = { fileName };
     _ayncStorageWebSocketServer.send(JSON.stringify({ apiName, queId, fileName, args }));
-    return resolveMessageFromRN(fileName, this.timeout);
+    return this._resolveMessageFromRN(fileName, this.timeout);
   }
+
+  _resolveMessageFromRN(fileName) {
+    let result = null;
+    for (let i = 0; i < this.timeout; i++) {
+      sleep.sleep(1);
+      const fileContent = fs.readFileSync(fileName, 'utf8');
+      if (fileContent) {
+        const json = JSON.parse(fileContent);
+        delete this.que[Number(json.queId)];
+        result = json.result;
+        break;
+      }
+    }
+    fs.unlinkSync(fileName);
+    if (!result) {
+      throw new Error("can't receive response from ReactNative Application");
+    }
+    return result;
+  }
+
 };

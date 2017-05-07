@@ -31,7 +31,7 @@ describe('RNAsyncStorage#sendToRN', () => {
 
   context('receive response from WebSocketServer', () => {
     let proxiedTestee = null;
-    const response = { result: 'foo' };
+    const response = { result: 'foo', queId: 1 };
     const tempFilePath = './sandbox/testresult';
 
     beforeEach(() => {
@@ -45,6 +45,7 @@ describe('RNAsyncStorage#sendToRN', () => {
       const result = proxiedTestee.sendToRN('someAPI', []);
       assert.equal(result, response.result, 'assert response');
       assert(!fs.existsSync(tempFilePath), 'remove tempfile');
+      assert.deepEqual({}, proxiedTestee.que, 'remove que');
     });
   });
 });
