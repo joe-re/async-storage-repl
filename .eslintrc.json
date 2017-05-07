@@ -2,11 +2,14 @@
   "parser": "babel-eslint",
   "extends": "airbnb-base",
   "globals": {
-    "_ayncStorageWebSocketServer": true
+    "_ayncStorageWebSocketServer": true,
+    "WebSocket": true,
+    "MessageEvent": true
   },
   "rules": {
     "import/no-extraneous-dependencies": 0,
     "no-underscore-dangle": 0,
-    "no-plusplus": 0
+    "no-plusplus": 0,
+    "no-prototype-builtins": 0
   }
 }
