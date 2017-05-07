@@ -8,7 +8,7 @@ class WebSocketServer {
     wss.on('connection', (ws) => {
       ws.on('message', (message) => {
         const json = JSON.parse(message);
-        fs.writeFileSync(json.fileName, json.result, 'utf8');
+        fs.writeFileSync(json.fileName, message, 'utf8');
       });
       this.ws = ws;
     });

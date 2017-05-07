@@ -9,7 +9,7 @@ function resolveMessageFromRN(filePath) {
   for (let i = 0; i < 10; i++) {
     sleep.sleep(1);
     if (fs.existsSync(filePath)) {
-      result = fs.readFileSync(filePath, 'utf8');
+      result = JSON.parse(fs.readFileSync(filePath, 'utf8')).result;
       break;
     }
   }
