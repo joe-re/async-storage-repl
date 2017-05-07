@@ -27,18 +27,50 @@ class RNAsyncStorage {
 
   getAllKeys(): string[] {
     const result = this.sendToRN('getAllKeys');
-    return result ? result.split(',') : [];
+    return result || [];
   }
 
-  getItem(key: string): ?string {
+  getItem(key: string) {
     return this.sendToRN('getItem', [key]);
   }
 
-  setItem(key: string, value: string): void {
-    this.sendToRN('setItem', [key, value]);
+  setItem(key: string, value: string) {
+    return this.sendToRN('setItem', [key, value]);
   }
 
-  sendToRN(apiName: string, args: string[]=[]): ?string {
+  removeItem(key: string) {
+    return this.sendToRN('removeItem', [key]);
+  }
+
+  mergeItem(key: string, value: string) {
+    return this.sendToRN('mergeItem', [key, value]);
+  }
+
+  clear() {
+    return this.sendToRN('clear');
+  }
+
+  flushGetRequests() {
+    return this.sendToRN('flushGetRequests');
+  }
+
+  multiGet(keys: string[]) {
+    return this.sendToRN('multiGet', [keys]);
+  }
+
+  multiSet(keyValuePairs: string[][]) {
+    return this.sendToRN('multiSet', [keyValuePairs]);
+  }
+
+  multiRemove(keys: string[]) {
+    return this.sendToRN('multiRemove', [keys]);
+  }
+
+  multiMerge(keyValuePairs: string[][]) {
+    return this.sendToRN('multiMerge', [keyValuePairs]);
+  }
+
+  sendToRN(apiName: string, args: mixed[]=[]): ?any {
     const queId = ++this.queNo;
     const fileName = tempWrite.sync('');
     this.que[queId] = { fileName };
