@@ -7,13 +7,18 @@
   "dependencies": {
     "babel-register": "^6.24.1",
     "events": "^1.1.1",
+    "flow-runtime": "^0.12.0",
     "react-native": "^0.44.0",
     "sleep": "^5.1.1",
     "temp-write": "^3.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
+    "babel-plugin-flow-runtime": "^0.11.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.1.3"
   }

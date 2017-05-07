@@ -7,17 +7,14 @@ global._ayncStorageWebSocketServer = spawn('node', [path.join(__dirname, 'server
 });
 
 process.on('exit', () => {
-  console.log('exit');
   global._ayncStorageWebSocketServer.send('exit');
 });
 
 process.on('SIGINT', () => {
-  console.log('sigint');
   process.exit();
 });
 
 process.on('SIGTERM', () => {
-  console.log('sigterm');
   process.exit();
 });
 
