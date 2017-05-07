@@ -5,7 +5,11 @@
     "_ayncStorageWebSocketServer": true,
     "WebSocket": true,
     "MessageEvent": true,
-    "CloseEvent": true
+    "CloseEvent": true,
+    "describe": true,
+    "beforeEach": true,
+    "context": true,
+    "it": true
   },
   "rules": {
     "import/no-extraneous-dependencies": 0,
