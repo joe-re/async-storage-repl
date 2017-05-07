@@ -3,26 +3,34 @@
 const tempWrite = require('temp-write');
 const sleep = require('sleep');
 const fs = require('fs');
+console.log(tempWrite);
 
-function resolveMessageFromRN(filePath) {
+function resolveMessageFromRN(filePath, timeout) {
   let result = null;
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < timeout; i++) {
     sleep.sleep(1);
-    if (fs.existsSync(filePath)) {
-      result = JSON.parse(fs.readFileSync(filePath, 'utf8')).result;
+    console.log(filePath);
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    if (fileContent) {
+      result = JSON.parse(fileContent).result;
       break;
     }
+  }
+  if (!result) {
+    throw new Error("can't receive response from ReactNative Application");
   }
   return result;
 }
 
-class RNAsyncStorage {
+module.exports = class RNAsyncStorage {
   queNo: number;
   que: {[key: number]: Object}
+  timeout: number;
 
-  constructor() {
+  constructor(props: { timeout?: number } = {}) {
     this.queNo = 0;
     this.que = {};
+    this.timeout = props.timeout || 10;
   }
 
   getAllKeys(): string[] {
@@ -75,8 +83,6 @@ class RNAsyncStorage {
     const fileName = tempWrite.sync('');
     this.que[queId] = { fileName };
     _ayncStorageWebSocketServer.send(JSON.stringify({ apiName, queId, fileName, args }));
-    return resolveMessageFromRN(fileName);
+    return resolveMessageFromRN(fileName, this.timeout);
   }
-}
-
-module.exports = new RNAsyncStorage();
+};

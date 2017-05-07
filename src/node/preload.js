@@ -1,7 +1,9 @@
 require('babel-register');
 const spawn = require('child_process').spawn;
 const path = require('path');
+const Storage = require('./RNAsyncStorage');
 
+global.RNAsyncStorage = new Storage();
 global._ayncStorageWebSocketServer = spawn('node', [path.join(__dirname, 'server.js')], {
   stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
 });
@@ -17,5 +19,3 @@ process.on('SIGINT', () => {
 process.on('SIGTERM', () => {
   process.exit();
 });
-
-global.RNAsyncStorage = require('./RNAsyncStorage');
