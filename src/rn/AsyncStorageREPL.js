@@ -21,16 +21,21 @@ function extractDataFromMessage(e: MessageEvent): ?string {
 
 class AsyncStorageREPL {
   ws: WebSocket;
+  autoReconnectInterval: number;
+
+  constructor() {
+    this.autoReconnectInterval = 5 * 1000;
+  }
+
   connect() {
     this.ws = new WebSocket('ws://localhost:8080');
     this.ws.onopen = () => {
-      // const dumpRaw = AsyncStorage.getAllKeys().then((keys) => {
-      //   return Promise.all(keys.map((key) => AsyncStorage.getItem(key)));
-      // });
-      // dumpRaw.then((data) => {
-      //   console.log(data);
-      //   ws.send(data.join(',')); // send a message
-      // })
+      console.log('open');
+    };
+
+    this.ws.onclose = (e) => {
+      console.log('close');
+      this.reconnect();
     };
 
     this.ws.onmessage = (e: MessageEvent) => {
@@ -52,6 +57,13 @@ class AsyncStorageREPL {
         this.ws.send(JSON.stringify({ queId, fileName, error: 0, result }));
       }
     };
+  }
+
+  reconnect() {
+    setTimeout(() => {
+      console.log('reconnecting...');
+      this.connect();
+    }, this.autoReconnectInterval);
   }
 }
 
