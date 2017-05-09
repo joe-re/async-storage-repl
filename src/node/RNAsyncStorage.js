@@ -87,4 +87,15 @@ module.exports = class RNAsyncStorage {
     return result;
   }
 
+  _exit() {
+    return Promise.all(Object.values(this.que).map(que =>
+      new Promise((resolve) => {
+        if (que && typeof que === 'object' && typeof que.fileName === 'string') {
+          fs.unlink(que.fileName, () => resolve());
+        } else {
+          resolve();
+        }
+      }),
+    ));
+  }
 };

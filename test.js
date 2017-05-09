@@ -49,3 +49,14 @@ describe('RNAsyncStorage#sendToRN', () => {
     });
   });
 });
+
+describe('RNAsyncStorage#_exit()', () => {
+  const testee = new RNAsyncStorage({ timeout: 1 });
+  const tempFilePath = './sandbox/_exit_temp_file';
+  it('shuold remove remain tempfiles', () => {
+    testee.que[1] = { fileName: tempFilePath };
+    fs.writeFileSync(tempFilePath, '');
+    testee._exit();
+    assert(!fs.existsSync(tempFilePath), 'remove tempfile');
+  });
+});

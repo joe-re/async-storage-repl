@@ -9,6 +9,7 @@ global._ayncStorageWebSocketServer = spawn('node', [path.join(__dirname, 'server
 });
 
 process.on('exit', () => {
+  global.RNAsyncStorage._exit();
   global._ayncStorageWebSocketServer.send('exit');
 });
 
