@@ -11,7 +11,8 @@
   "author": "joe-re",
   "license": "MIT",
   "scripts": {
-    "prepublish": "babel --out-dir dist src",
+    "build": "babel --out-dir dist/node src/node && cp -r src/rn/ dist/rn",
+    "prepublish": "npm run build",
     "test": "mocha --compilers js:babel-register test.js"
   },
   "dependencies": {
