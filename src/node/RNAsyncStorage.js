@@ -70,6 +70,7 @@ module.exports = class RNAsyncStorage {
 
   _resolveMessageFromRN(fileName) {
     let result = null;
+    let received = false;
     for (let i = 0; i < this.timeout; i++) {
       sleep.sleep(1);
       const fileContent = fs.readFileSync(fileName, 'utf8');
@@ -77,11 +78,12 @@ module.exports = class RNAsyncStorage {
         const json = JSON.parse(fileContent);
         delete this.que[Number(json.queId)];
         result = json.result;
+        received = true;
         break;
       }
     }
     fs.unlinkSync(fileName);
-    if (!result) {
+    if (!received) {
       throw new Error("can't receive response from ReactNative Application");
     }
     return result;
