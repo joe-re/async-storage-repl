@@ -1,6 +1,7 @@
 // @flow
 
 import { AsyncStorage } from 'react-native';
+import getHost from 'rn-host-detect';
 import Client from './WebSocketClient';
 
 function applyAsyncStorage(apiName: string, args: string[]): Promise<*> {
@@ -17,10 +18,10 @@ function applyAsyncStorage(apiName: string, args: string[]): Promise<*> {
 class AsyncStorageREPL {
   client: Client;
 
-  constructor() {
+  constructor(params: { host?: string, port?: number } = {}) {
     this.client = new Client({
-      url: 'localhost',
-      port: 8080,
+      url: params.host || getHost('localhost'),
+      port: params.port || 8080,
     });
     this.client.on('message', this.handleMessage.bind(this));
   }
