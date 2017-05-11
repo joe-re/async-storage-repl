@@ -1,8 +1,9 @@
-require('babel-register');
+require('react-native-mock/mock');
 const td = require('testdouble');
 const proxyquire = require('proxyquire');
 const fs = require('fs');
 const RNAsyncStorage = require('./src/node/RNAsyncStorage');
+const WebSocketClient = require('./src/rn/WebSocketClient').default;
 const assert = require('assert');
 
 if (!fs.existsSync('./sandbox')) {
@@ -58,5 +59,80 @@ describe('RNAsyncStorage#_exit()', () => {
     fs.writeFileSync(tempFilePath, '');
     testee._exit();
     assert(!fs.existsSync(tempFilePath), 'remove tempfile');
+  });
+});
+
+
+describe('AsyncStorageREPL#handleMessage()', () => {
+  let clientSend = null;
+  let testee = null;
+
+  beforeEach(() => {
+    testee = proxyquire('./src/rn/AsyncStorageREPL', {
+      'react-native': { AsyncStorage: {
+        promiseAPI: () => Promise.resolve('result'),
+        valueAPI: () => 'result',
+      } },
+    }).default;
+    const client = new WebSocketClient({ url: 'test', port: 8080 });
+    clientSend = td.function('send');
+    client.send = clientSend;
+    testee.client = client;
+  });
+
+  context('receives undefined apiName', () => {
+    it('should send error', () => {
+      const result = testee.handleMessage(JSON.stringify({
+        apiName: 'undefinedAPI',
+        queId: 1,
+        args: [],
+        filename: './tempfile',
+      }));
+      return result.then((resolved) => {
+        throw new Error(`Promise was unexpectedly fulfilled: ${resolved}`);
+      }).catch((error) => {
+        td.verify(clientSend(JSON.stringify({
+          queId: 1,
+          error: 1,
+          message: error,
+        })));
+      });
+    });
+  });
+
+  context('resolve as Promise', () => {
+    it('should send result', () => {
+      const result = testee.handleMessage(JSON.stringify({
+        apiName: 'promiseAPI',
+        queId: 1,
+        args: [],
+        filename: './tempfile',
+      }));
+      return result.then((resolved) => {
+        td.verify(clientSend(JSON.stringify({
+          queId: 1,
+          error: 0,
+          result: resolved,
+        })));
+      });
+    });
+  });
+
+  context('resolve as value', () => {
+    it('should send result', () => {
+      const result = testee.handleMessage(JSON.stringify({
+        apiName: 'valueAPI',
+        queId: 1,
+        args: [],
+        filename: './tempfile',
+      }));
+      return result.then((resolved) => {
+        td.verify(clientSend(JSON.stringify({
+          queId: 1,
+          error: 0,
+          result: resolved,
+        })));
+      });
+    });
   });
 });

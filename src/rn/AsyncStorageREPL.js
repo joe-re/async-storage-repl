@@ -7,8 +7,11 @@ function applyAsyncStorage(apiName: string, args: string[]): Promise<*> {
   if (!AsyncStorage.hasOwnProperty(apiName)) {
     return Promise.reject(`can't find AsyncStorage API: ${apiName}`);
   }
-  console.log(args);
-  return AsyncStorage[apiName](...args);
+  const result = AsyncStorage[apiName](...args);
+  if (result && typeof result.then === 'function') {
+    return result;
+  }
+  return Promise.resolve(result);
 }
 
 class AsyncStorageREPL {
@@ -30,16 +33,13 @@ class AsyncStorageREPL {
     const json = JSON.parse(message);
     const { apiName, args, queId, fileName } = json;
     const result = applyAsyncStorage(apiName, args);
-    console.log(result);
-    if (result && typeof result.then === 'function') {
-      result.then((resolved) => {
-        this.client.send(JSON.stringify({ queId, fileName, error: 0, result: resolved }));
-      }).catch((errMessage) => {
-        this.client.send(JSON.stringify({ queId, fileName, error: 1, message: errMessage }));
-      });
-    } else {
-      this.client.send(JSON.stringify({ queId, fileName, error: 0, result }));
-    }
+    return result.then((resolved) => {
+      this.client.send(JSON.stringify({ queId, fileName, error: 0, result: resolved }));
+      return resolved;
+    }).catch((errMessage) => {
+      this.client.send(JSON.stringify({ queId, fileName, error: 1, message: errMessage }));
+      return Promise.reject(errMessage);
+    });
   }
 }
 
