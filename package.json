@@ -1,7 +1,13 @@
 {
-  "name": "async-storage-cli",
+  "name": "async-storage-repl",
+  "description": "AsyncStorageRepl provides you to manipurate ReactNative AsyncStorage API on your node REPL.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:joe-re/async-storage-repl"
+  },
   "version": "0.0.1",
-  "main": "index.js",
+  "bin": "bin/async-storage-repl",
+  "main": "src/rn/AsyncStorageREPL.js",
   "author": "joe-re",
   "license": "MIT",
   "scripts": {
