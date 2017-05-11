@@ -17,7 +17,9 @@ class WebSocketServer {
         wss.close();
         return;
       }
-      this.ws.send(message);
+      if (this.ws) {
+        this.ws.send(message);
+      }
     });
   }
 }
