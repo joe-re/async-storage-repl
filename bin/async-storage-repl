@@ -10,7 +10,7 @@ function getArg(paramName) {
 }
 
 const port = getArg('--port') || '';
-require('child_process').spawn('node', ['-r', path.join(__dirname, '../src/node/preload.js')], {
+require('child_process').spawn('node', ['-r', path.join(__dirname, '../dist/node/preload.js')], {
   stdio: [0, 1, 2],
   env: Object.assign({}, process.env, { asrport: port })
 });
