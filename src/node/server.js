@@ -2,8 +2,8 @@ const WebSocket = require('ws');
 const fs = require('fs');
 
 class WebSocketServer {
-  start() {
-    const wss = new WebSocket.Server({ port: 8080 });
+  start(port) {
+    const wss = new WebSocket.Server({ port: port || 8080 });
     this.ws = null;
     wss.on('connection', (ws) => {
       ws.on('message', (message) => {
@@ -24,4 +24,4 @@ class WebSocketServer {
   }
 }
 const server = new WebSocketServer();
-server.start();
+server.start(process.env.asrport);

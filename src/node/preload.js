@@ -6,6 +6,7 @@ const Storage = require('./RNAsyncStorage');
 global.RNAsyncStorage = new Storage();
 global._ayncStorageWebSocketServer = spawn('node', [path.join(__dirname, 'server.js')], {
   stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
+  env: process.env,
 });
 
 process.on('exit', () => {

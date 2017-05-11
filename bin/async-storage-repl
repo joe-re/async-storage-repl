@@ -1,2 +1,14 @@
 #! /usr/bin/env node
-require('child_process').spawn('node', ['-r', '../src/node/preload.js'], {stdio: [0, 1, 2]})
+function getArg(paramName) {
+  const index = process.argv.indexOf(paramName);
+  if (index < 0) {
+    return null;
+  }
+  return process.argv[index + 1];
+}
+
+const port = getArg('--port') || '';
+require('child_process').spawn('node', ['-r', '../src/node/preload.js'], {
+  stdio: [0, 1, 2],
+  env: Object.assign({}, process.env, { asrport: port })
+});
