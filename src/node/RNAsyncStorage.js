@@ -72,7 +72,7 @@ module.exports = class RNAsyncStorage {
     let result = null;
     let received = false;
     for (let i = 0; i < this.timeout; i++) {
-      sleep.sleep(1);
+      sleep.msleep(100);
       const fileContent = fs.readFileSync(fileName, 'utf8');
       if (fileContent) {
         const json = JSON.parse(fileContent);
@@ -81,6 +81,7 @@ module.exports = class RNAsyncStorage {
         received = true;
         break;
       }
+      sleep.msleep(900);
     }
     fs.unlinkSync(fileName);
     if (!received) {
