@@ -73,7 +73,7 @@ describe('AsyncStorageREPL#handleMessage()', () => {
         promiseAPI: () => Promise.resolve('result'),
         valueAPI: () => 'result',
       } },
-    }).default;
+    }).default();
     const client = new WebSocketClient({ url: 'test', port: 8080 });
     clientSend = td.function('send');
     client.send = clientSend;

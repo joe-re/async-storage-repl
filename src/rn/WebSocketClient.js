@@ -37,18 +37,18 @@ export default class WebSocketClient extends EventEmitter {
 
   reconnect() {
     setTimeout(() => {
-      console.log('reconnecting...');
+      console.info('reconnecting...');
       this.open();
     }, 3000);
   }
 
   handleOpen() {
-    console.log(`open connection: ws://${this.url}:${this.port}}`);
+    console.info(`open connection: ws://${this.url}:${this.port}}`);
   }
 
   handleClose(e: CloseEvent) {
     if (e.code === 1000) {
-      console.log(`close connection: ws://${this.url}:${this.port}}`);
+      console.info(`close connection: ws://${this.url}:${this.port}}`);
       this.ws = null;
       return;
     }

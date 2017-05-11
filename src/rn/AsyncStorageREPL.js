@@ -44,4 +44,6 @@ class AsyncStorageREPL {
   }
 }
 
-export default new AsyncStorageREPL();
+export default function (params: { host?: string, port?: number } = {}) {
+  return new AsyncStorageREPL(params);
+}
