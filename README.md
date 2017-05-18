@@ -2,6 +2,8 @@
 
 AsyncStorageRepl provides you to access remote ReactNative application's AsyncStorage from your node REPL.
 
+![gif](https://cloud.githubusercontent.com/assets/4954534/26222189/09924ee2-3c54-11e7-8247-ed15afa7cd31.gif)
+
 ```
 npm i async-storage-repl -D
 ```
@@ -37,6 +39,10 @@ null
   'reduxPersist:auth',
   'reduxPersist:nav' ]
 ```
+
+# Example
+
+[example](/example)
 
 # API
 
