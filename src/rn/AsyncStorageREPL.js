@@ -17,8 +17,9 @@ function executeAsyncStorageAPI(apiName: string, args: string[]): Promise<*> {
   return Promise.resolve(result);
 }
 
-function dump() {
-  return AsyncStorage.multiGet(AsyncStorage.getAllKeys())
+async function dump() {
+  const keys = await AsyncStorage.getAllKeys();
+  return AsyncStorage.multiGet(keys)
 }
 
 class AsyncStorageREPL {

@@ -4,6 +4,8 @@ const tempWrite = require('temp-write');
 const sleep = require('sleep');
 const fs = require('fs');
 
+type DumpTouple = [string, string]
+
 module.exports = class RNAsyncStorage {
   queNo: number;
   que: {[key: number]: Object}
@@ -48,7 +50,7 @@ module.exports = class RNAsyncStorage {
     return this.sendToRN('multiGet', [keys]);
   }
 
-  multiSet(keyValuePairs: string[][]) {
+  multiSet(keyValuePairs: DumpTouple[]) {
     return this.sendToRN('multiSet', [keyValuePairs]);
   }
 
@@ -61,7 +63,11 @@ module.exports = class RNAsyncStorage {
   }
 
   dump() {
-    return this.dump();
+    return this.sendToRN('dump');
+  }
+
+  load(data: DumpTouple[]) {
+    return this.multiSet(data);
   }
 
   sendToRN(apiName: string, args: mixed[]=[]): ?any {
