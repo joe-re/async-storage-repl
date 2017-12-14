@@ -4,8 +4,10 @@ import { AsyncStorage } from 'react-native';
 import getHost from 'rn-host-detect';
 import Client from './WebSocketClient';
 
-function applyAsyncStorage(apiName: string, args: string[]): Promise<*> {
-  if (!AsyncStorage.hasOwnProperty(apiName)) {
+function executeAsyncStorageAPI(apiName: string, args: string[]): Promise<*> {
+  if (apiName === 'dump') {
+    return dump()
+  } else if (!AsyncStorage.hasOwnProperty(apiName)) {
     return Promise.reject(`can't find AsyncStorage API: ${apiName}`);
   }
   const result = AsyncStorage[apiName](...args);
@@ -13,6 +15,10 @@ function applyAsyncStorage(apiName: string, args: string[]): Promise<*> {
     return result;
   }
   return Promise.resolve(result);
+}
+
+function dump() {
+  return AsyncStorage.multiGet(AsyncStorage.getAllKeys())
 }
 
 class AsyncStorageREPL {
@@ -33,7 +39,7 @@ class AsyncStorageREPL {
   handleMessage(message: string) {
     const json = JSON.parse(message);
     const { apiName, args, queId, fileName } = json;
-    const result = applyAsyncStorage(apiName, args);
+    const result = executeAsyncStorageAPI(apiName, args);
     return result.then((resolved) => {
       this.client.send(JSON.stringify({ queId, fileName, error: 0, result: resolved }));
       return resolved;

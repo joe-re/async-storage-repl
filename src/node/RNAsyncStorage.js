@@ -60,6 +60,10 @@ module.exports = class RNAsyncStorage {
     return this.sendToRN('multiMerge', [keyValuePairs]);
   }
 
+  dump() {
+    return this.dump();
+  }
+
   sendToRN(apiName: string, args: mixed[]=[]): ?any {
     const queId = ++this.queNo;
     const fileName = tempWrite.sync('');
