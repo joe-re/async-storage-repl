@@ -16,7 +16,7 @@ export default class WebSocketClient extends EventEmitter {
   port: number;
 
   constructor(options: { url: string, port?: number }) {
-    super(options);
+    super();
     this.url = options.url;
     this.port = options.port || 8080;
   }

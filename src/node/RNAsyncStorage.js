@@ -65,7 +65,7 @@ module.exports = class RNAsyncStorage {
     const fileName = tempWrite.sync('');
     this.que[queId] = { fileName };
     _ayncStorageWebSocketServer.send(JSON.stringify({ apiName, queId, fileName, args }));
-    return this._resolveMessageFromRN(fileName, this.timeout);
+    return this._resolveMessageFromRN(fileName);
   }
 
   _resolveMessageFromRN(fileName) {
