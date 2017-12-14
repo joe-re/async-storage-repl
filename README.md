@@ -46,6 +46,7 @@ null
 
 # API
 
+## AsyncStorage APIs
 AsyncStorageREPL provides RNAsyncStorage on your node REPL as a global object.
 You can access [AsyncStorage's all APIs](https://facebook.github.io/react-native/docs/asyncstorage.html) via this object.
 
@@ -73,6 +74,26 @@ Actual: number
 
 ```
 
+## dump & load
+
+You can save & load RN Application AsyncStorage data.
+
+`dump()` provides you getting dump.
+`load(string[][])` provides you loading dump.
+
+```sh
+> const data = RNAsyncStorage.dump()
+undefined
+> data
+[ [ 'comments', '["foo","bar","baz"]' ] ]
+> fs.writeSync('./dump1.txt', JSON.stringify(data))
+```
+
+```sh
+> const data = JSON.parse(fs.readSync('./dump1.txt'))
+> RNAsyncStorage.load(data)
+null
+```
 # Advanced Usage
 
 ## ReactNative side
