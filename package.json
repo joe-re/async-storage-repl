@@ -5,7 +5,7 @@
     "type": "git",
     "url": "git@github.com:joe-re/async-storage-repl"
   },
-  "version": "0.0.6",
+  "version": "0.1.0",
   "bin": "bin/async-storage-repl",
   "main": "dist/rn/AsyncStorageREPL.js",
   "author": "joe-re",
